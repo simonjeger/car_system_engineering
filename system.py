@@ -1,19 +1,26 @@
+import os
 import numpy as np
-import shell
-import drive_train
+import SHELL
+import DRIVE_TRAIN
 
 
 
 class conversion:
 
-    def __init__(self):
+    def __init__(self, name, my_shell, my_drive_train, consumption):
+
+        # Generate folder for results (only for highest level file)
+        self.path = 'specifications'
+        os.mkdir(self.path)
+
         # Initialize
-        self.my_shell = shell.jaguar()
-        self.my_drive_train = drive_train.drive_weststart()
+        self.my_shell = my_shell
+        self.my_drive_train = my_drive_train
 
         # Specs
-        self.consumption = 18   # kWh / 100 km (https://ev-database.org/cheatsheet/energy-consumption-electric-car)
-        self.weight = self.my_shell.weight + np.sum(self.my_drive_train.quantity) * self.my_drive_train.weight
+        self.name = name
+        self.consumption = consumption   # kWh / 100 km (https://ev-database.org/cheatsheet/energy-consumption-electric-car)
+        self.weight = self.my_shell.weight + self.my_drive_train.weight
         self.range = round(self.my_drive_train.capacity / self.consumption * 100, 1)   # km
 
         # Error
@@ -40,27 +47,69 @@ class conversion:
         for i in range(len(self.my_shell.free_space)):
             quantity_max[i] = np.max(quantity[i])
 
-        if np.sum(quantity_max) >= np.sum(self.my_drive_train.quantity):
+        if np.sum(quantity_max) >= np.sum(self.my_drive_train.quantity_battery):
             return 0
         else:
             print(str(__class__.__name__) + ': error_volume')
             print('\n')
 
 
-    def display(self):
+    def specifications(self):
+
+        # Initialize
+        string = ''
+
         # Name
-        print('-----------------------------------------')
-        print('system: ' + __class__.__name__)
-        print('- - - - - - - - - - - - - - - - - - - - -')
+        string = string + '-----------------------------------------' + '\n'
+        string = string + __class__.__name__ + ': ' + self.name + '\n'
+        string = string + '- - - - - - - - - - - - - - - - - - - - -' + '\n'
 
         # Specs
-        print('my_shell: ' + str(self.my_shell.__class__.__name__))
-        print('my_drive_train: ' + str(self.my_drive_train.__class__.__name__))
-        print('consumption: ' + str(self.consumption) + ' [kWh / 100 km]')
-        print('weight: ' + str(self.weight) + ' [kg]')
-        print('range: ' + str(self.range) + ' [km]')
-        print('\n')
+        string = string + 'my_shell: ' + str(self.my_shell.__class__.__name__) + '\n'
+        string = string + 'my_drive_train: ' + str(self.my_drive_train.__class__.__name__) + '\n'
+        string = string + 'consumption: ' + str(self.consumption) + ' [kWh / 100 km]' + '\n'
+        string = string + 'weight: ' + str(self.weight) + ' [kg]' + '\n'
+        string = string + 'range: ' + str(self.range) + ' [km]' + '\n'
+        string = string + '\n' + '\n'
 
-my_conversion = conversion()
-my_conversion.display()
-my_conversion.my_drive_train.display()
+        return string
+
+
+    def display(self):
+        print(self.specifications())
+
+
+    def write(self):
+        # Clear file
+        file = open(self.path + '/' + __class__.__name__ + ".txt", "w")
+        file.close()
+        os.remove(self.path + '/' + __class__.__name__ + ".txt")
+
+        # Write file
+        file = open(self.path + '/' + __class__.__name__ + ".txt", "w")
+        file.write(self.specifications())
+        file.close()
+
+
+    def write_all(self):
+        # (Only for highest level file)
+
+        # Clear file
+        file = open(self.path + "/overall.txt", "w")
+        file.close()
+        os.remove(self.path + "/overall.txt")
+
+        # Write file
+        file = open(self.path + "/overall.txt", "w")
+        file.write(self.specifications())
+        file.write(self.my_shell.specifications())
+        file.write(self.my_drive_train.specifications())
+        file.write(self.my_drive_train.my_motor.specifications())
+        file.write(self.my_drive_train.my_battery.specifications())
+        file.close()
+
+
+
+my_conversion = conversion('jaguar', SHELL.jaguar, DRIVE_TRAIN.weststart, 18)
+my_conversion.write()
+my_conversion.write_all()

@@ -1,22 +1,25 @@
+import os
 import numpy as np
+import BATTERY
+import MOTOR
 
-import battery
-import motor
 
 
-class drive_tesla:
+class drive_train:
 
-    def __init__(self):
+    def __init__(self, name, my_motor, my_battery, quantity_battery):
+
         # Initialize
-        self.my_motor = motor.ev_hype_low()
-        self.my_battery = battery.tesla()
+        self.my_motor = my_motor
+        self.my_battery = my_battery
 
         # Specs
-        self.quantity = [5] * 1   # scalar
-        self.weight = self.my_battery.weight
+        self.name = name
+        self.quantity_battery = quantity_battery   # scalar
+        self.weight = self.my_battery.weight + self.my_motor.weight
         self.dimension = self.my_battery.dimension
-        self.capacity = np.sum(self.quantity) * self.my_battery.capacity
-        self.voltage = self.quantity[-1] * self.my_battery.voltage
+        self.capacity = np.sum(self.quantity_battery) * self.my_battery.capacity
+        self.voltage = self.quantity_battery[-1] * self.my_battery.voltage
 
         # Error
         self.error_voltage()
@@ -29,104 +32,46 @@ class drive_tesla:
             print(str(__class__.__name__) + ': error_voltage')
 
 
-    def display(self):
-        # Name
-        print('-----------------------------------------')
-        print('drive_train: ' + __class__.__name__)
-        print('- - - - - - - - - - - - - - - - - - - - -')
+    def specifications(self):
 
-        # Specs
-        print('my_motor: ' + str(self.my_battery.__class__.__name__))
-        print('my_battery: ' + str(self.my_battery.__class__.__name__))
-        print('quantity: ' + str(self.quantity))
-        print('weight: ' + str(self.weight) + ' [kg]')
-        print('dimension: ' + str(self.dimension) + ' [m]')
-        print('capacity: ' + str(self.capacity) + ' [kWh]')
-        print('voltage: ' + str(self.voltage) + ' [V]')
-        print('\n')
-
-
-
-class drive_po4:
-
-    def __init__(self):
         # Initialize
-        self.my_battery = battery.life_po4()
-        self.my_motor = motor.ev_hype_low()
+        string = ''
+
+        # Name
+        string = string + '-----------------------------------------' + '\n'
+        string = string + __class__.__name__ + ': ' + self.name + '\n'
+        string = string + '- - - - - - - - - - - - - - - - - - - - -' + '\n'
 
         # Specs
-        self.quantity = [25] * 2  # scalar
-        self.weight = self.my_battery.weight
-        self.dimension = self.my_battery.dimension
-        self.capacity = np.sum(self.quantity) * self.my_battery.capacity
-        self.voltage = self.quantity[-1] * self.my_battery.voltage
+        string = string + 'my_motor: ' + self.my_battery.__class__.__name__ + '\n'
+        string = string + 'my_battery: ' + self.my_battery.__class__.__name__ + '\n'
+        string = string + 'quantity: ' + str(self.quantity_battery) + '\n'
+        string = string + 'weight: ' + str(self.weight) + ' [kg]' + '\n'
+        string = string + 'dimension: ' + str(self.dimension) + ' [m]' + '\n'
+        string = string + 'capacity: ' + str(self.capacity) + ' [kWh]' + '\n'
+        string = string + 'voltage: ' + str(self.voltage) + ' [V]' + '\n'
+        string = string + '\n' + '\n'
 
-        # Error
-        self.error_voltage()
-
-
-    def error_voltage(self):
-        if self.voltage <= self.my_motor.voltage_max:
-            return 0
-        else:
-            print(str(__class__.__name__) + ': error_voltage')
+        return string
 
 
     def display(self):
-        # Name
-        print('-----------------------------------------')
-        print('drive_train: ' + __class__.__name__)
-        print('- - - - - - - - - - - - - - - - - - - - -')
-
-        # Specs
-        print('my_motor: ' + str(self.my_motor.__class__.__name__))
-        print('my_battery: ' + str(self.my_battery.__class__.__name__))
-        print('quantity: ' + str(self.quantity))
-        print('weight: ' + str(self.weight) + ' [kg]')
-        print('dimension: ' + str(self.dimension) + ' [m]')
-        print('capacity: ' + str(self.capacity) + ' [kWh]')
-        print('voltage: ' + str(self.voltage) + ' [V]')
-        print('\n')
+        print(self.specifications())
 
 
+    def write(self):
+        # Clear file
+        file = open(self.path + '/' + __class__.__name__ + ".txt", "w")
+        file.close()
+        os.remove(self.path + '/' + __class__.__name__ + ".txt")
 
-class drive_weststart:
-
-    def __init__(self):
-        # Initialize
-        self.my_battery = battery.weststart()
-        self.my_motor = motor.ev_hype_low()
-
-        # Specs
-        self.quantity = [35] * 3  # scalar
-        self.weight = self.my_battery.weight
-        self.dimension = self.my_battery.dimension
-        self.capacity = np.sum(self.quantity) * self.my_battery.capacity
-        self.voltage = self.quantity[-1] * self.my_battery.voltage
-
-        # Error
-        self.error_voltage()
+        # Write file
+        file = open(self.path + '/' + __class__.__name__ + ".txt", "w")
+        file.write(self.specifications())
+        file.close()
 
 
-    def error_voltage(self):
-        if self.voltage <= self.my_motor.voltage_max:
-            return 0
-        else:
-            print(str(__class__.__name__) + ': error_voltage')
 
-
-    def display(self):
-        # Name
-        print('-----------------------------------------')
-        print('drive_train: ' + __class__.__name__)
-        print('- - - - - - - - - - - - - - - - - - - - -')
-
-        # Specs
-        print('my_motor: ' + str(self.my_motor.__class__.__name__))
-        print('my_battery: ' + str(self.my_battery.__class__.__name__))
-        print('quantity: ' + str(self.quantity))
-        print('weight: ' + str(self.weight) + ' [kg]')
-        print('dimension: ' + str(self.dimension) + ' [m]')
-        print('capacity: ' + str(self.capacity) + ' [kWh]')
-        print('voltage: ' + str(self.voltage) + ' [V]')
-        print('\n')
+telsa = drive_train('tesla', MOTOR.ev_hype_low, BATTERY.tesla, [5] * 1)
+po4 = drive_train('po4', MOTOR.ev_hype_low, BATTERY.life_po4, [25] * 2)
+weststart = drive_train('weststart', MOTOR.ev_hype_low, BATTERY.weststart, [35] * 3)

@@ -1,85 +1,60 @@
+import os
 import numpy as np
 
 
 
-class tesla:
-    def __init__(self):
+class battery:
+    def __init__(self, name, weight, dimension, capacity, voltage):
+
         # Initialize
 
         # Specs
-        self.weight = 25  # kg
-        self.dimension = [0.7, 0.31, 0.08]    # m
-        self.capacity = 5.3    # kWh
-        self.voltage = 24.9  # V
+        self.name = name
+        self.weight = weight  # kg
+        self.dimension = dimension  # m
+        self.capacity = capacity    # kWh
+        self.voltage = voltage  # V
 
         # Error
 
 
-    def display(self):
-        # Name
-        print('-----------------------------------------')
-        print('battery: ' + __class__.__name__)
-        print('- - - - - - - - - - - - - - - - - - - - -')
 
-        # Specs
-        print('weight: ' + str(self.weight) + ' [kg]')
-        print('dimension: ' + str(self.dimension) + ' [m]')
-        print('capacity: ' + str(self.capacity) + ' [kWh]')
-        print('voltage: ' + str(self.voltage) + ' [V]')
-        print('\n')
-
-
-
-class life_po4:
-    def __init__(self):
+    def specifications(self):
         # Initialize
+        string = ''
+
+        # Name
+        string = string + '-----------------------------------------' + '\n'
+        string = string + __class__.__name__ + ': ' + self.name + '\n'
+        string = string + '- - - - - - - - - - - - - - - - - - - - -' + '\n'
 
         # Specs
-        self.weight = 5.8125  # kg
-        self.dimension = [0.28, 0.19, 0.075]  # m
-        self.capacity = 0.5125  # kWh
-        self.voltage = 3.2  # V
+        string = string + 'weight: ' + str(self.weight) + ' [kg]' + '\n'
+        string = string + 'dimension: ' + str(self.dimension) + ' [m]' + '\n'
+        string = string + 'capacity: ' + str(self.capacity) + ' [kWh]' + '\n'
+        string = string + 'voltage: ' + str(self.voltage) + ' [V]' + '\n'
+        string = string + '\n' + '\n'
 
-        # Error
+        return string
 
 
     def display(self):
-        # Name
-        print('-----------------------------------------')
-        print('battery: ' + __class__.__name__)
-        print('- - - - - - - - - - - - - - - - - - - - -')
-
-        # Specs
-        print('weight: ' + str(self.weight) + ' [kg]')
-        print('dimension: ' + str(self.dimension) + ' [m]')
-        print('capacity: ' + str(self.capacity) + ' [kWh]')
-        print('voltage: ' + str(self.voltage) + ' [V]')
-        print('\n')
+        print(self.specifications())
 
 
+    def write(self):
+        # Clear file
+        file = open(self.path + '/' + __class__.__name__ + ".txt", "w")
+        file.close()
+        os.remove(self.path + '/' + __class__.__name__ + ".txt")
 
-class weststart:
-    def __init__(self):
-        # Initialize
-
-        # Specs
-        self.weight = 2.55  # kg
-        self.dimension = [0.252, 0.141, 0.041]  # m
-        self.capacity = 0.5125  # kWh
-        self.voltage = 3.7  # V
-
-        # Error
+        # Write file
+        file = open(self.path + '/' + __class__.__name__ + ".txt", "w")
+        file.write(self.specifications())
+        file.close()
 
 
-    def display(self):
-        # Name
-        print('-----------------------------------------')
-        print('battery: ' + __class__.__name__)
-        print('- - - - - - - - - - - - - - - - - - - - -')
 
-        # Specs
-        print('weight: ' + str(self.weight) + ' [kg]')
-        print('dimension: ' + str(self.dimension) + ' [m]')
-        print('capacity: ' + str(self.capacity) + ' [kWh]')
-        print('voltage: ' + str(self.voltage) + ' [V]')
-        print('\n')
+tesla = battery('tesla', 25, [0.7, 0.31, 0.08], 5.3, 24.9)
+life_po4= battery('life_po4', 5.8125, [0.28, 0.19, 0.075], 0.5125, 3.2)
+weststart = battery('weststart', 2.55, [0.252, 0.141, 0.041], 0.5125, 3.7)
