@@ -4,7 +4,7 @@ import numpy as np
 
 
 class battery:
-    def __init__(self, name, weight, dimension, capacity, voltage):
+    def __init__(self, name, weight, dimension, energy, voltage):
 
         # Initialize
 
@@ -12,8 +12,10 @@ class battery:
         self.name = name
         self.weight = weight  # kg
         self.dimension = dimension  # m
-        self.capacity = capacity    # kWh
-        self.voltage = voltage  # V
+        self.capacity = energy    # kWh
+        self.voltage_min = voltage[0]  # V
+        self.voltage_nom = voltage[1]
+        self.voltage_max = voltage[2]
 
         # Error
 
@@ -29,10 +31,12 @@ class battery:
         string = string + '- - - - - - - - - - - - - - - - - - - - -' + '\n'
 
         # Specs
-        string = string + 'weight: ' + str(self.weight) + ' [kg]' + '\n'
+        string = string + 'weight: ' + str(round(self.weight,1)) + ' [kg]' + '\n'
         string = string + 'dimension: ' + str(self.dimension) + ' [m]' + '\n'
-        string = string + 'capacity: ' + str(self.capacity) + ' [kWh]' + '\n'
-        string = string + 'voltage: ' + str(self.voltage) + ' [V]' + '\n'
+        string = string + 'capacity: ' + str(round(self.capacity,1)) + ' [kWh]' + '\n'
+        string = string + 'voltage_min: ' + str(round(self.voltage_min,1)) + ' [V]' + '\n'
+        string = string + 'voltage_nom: ' + str(round(self.voltage_nom,1)) + ' [V]' + '\n'
+        string = string + 'voltage_max: ' + str(round(self.voltage_max,1)) + ' [V]' + '\n'
         string = string + '\n' + '\n'
 
         return string
@@ -55,6 +59,7 @@ class battery:
 
 
 
-tesla = battery('tesla', 25, [0.7, 0.31, 0.08], 5.3, 24.9)
-life_po4= battery('life_po4', 5.8125, [0.28, 0.19, 0.075], 0.5125, 3.2)
-weststart = battery('weststart', 2.55, [0.252, 0.141, 0.041], 0.5125, 3.7)
+tesla = battery('tesla', 25, [0.7, 0.31, 0.08], 5.3, [19.6, 22, 24.9]) # the 22 is guessed, I couln't find it on EV europe
+life_po4= battery('life_po4', 5.8125, [0.28, 0.19, 0.075], 0.5125, [2.8, 3.2, 4])
+weststart = battery('weststart', 2.55, [0.252, 0.141, 0.041], 0.5125, [3, 3.7, 4.2])
+lfp = battery('lfp', 3.98, [0.2, 0.174, 0.054], 0.63, [2.5, 3.2, 3.65])

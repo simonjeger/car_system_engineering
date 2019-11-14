@@ -19,14 +19,16 @@ class drive_train:
         self.weight = self.my_battery.weight + self.my_motor.weight
         self.dimension = self.my_battery.dimension
         self.capacity = np.sum(self.quantity_battery) * self.my_battery.capacity
-        self.voltage = self.quantity_battery[-1] * self.my_battery.voltage
+        self.voltage_min = self.quantity_battery[-1] * self.my_battery.voltage_min
+        self.voltage_nom = self.quantity_battery[-1] * self.my_battery.voltage_nom
+        self.voltage_max = self.quantity_battery[-1] * self.my_battery.voltage_max
 
         # Error
         self.error_voltage()
 
 
     def error_voltage(self):
-        if self.voltage <= self.my_motor.voltage_max:
+        if self.voltage_max <= self.my_motor.voltage_max:
             return 0
         else:
             print(str(__class__.__name__) + ': error_voltage')
@@ -43,13 +45,15 @@ class drive_train:
         string = string + '- - - - - - - - - - - - - - - - - - - - -' + '\n'
 
         # Specs
-        string = string + 'my_motor: ' + self.my_battery.__class__.__name__ + '\n'
-        string = string + 'my_battery: ' + self.my_battery.__class__.__name__ + '\n'
+        string = string + 'my_motor: ' + self.my_motor.name + '\n'
+        string = string + 'my_battery: ' + self.my_battery.name + '\n'
         string = string + 'quantity: ' + str(self.quantity_battery) + '\n'
-        string = string + 'weight: ' + str(self.weight) + ' [kg]' + '\n'
+        string = string + 'weight: ' + str(round(self.weight,1)) + ' [kg]' + '\n'
         string = string + 'dimension: ' + str(self.dimension) + ' [m]' + '\n'
-        string = string + 'capacity: ' + str(self.capacity) + ' [kWh]' + '\n'
-        string = string + 'voltage: ' + str(self.voltage) + ' [V]' + '\n'
+        string = string + 'capacity: ' + str(round(self.capacity,1)) + ' [kWh]' + '\n'
+        string = string + 'voltage_min: ' + str(round(self.voltage_min,1)) + ' [V]' + '\n'
+        string = string + 'voltage_nom: ' + str(round(self.voltage_nom,1)) + ' [V]' + '\n'
+        string = string + 'voltage_max: ' + str(round(self.voltage_max,1)) + ' [V]' + '\n'
         string = string + '\n' + '\n'
 
         return string
@@ -72,6 +76,7 @@ class drive_train:
 
 
 
-telsa = drive_train('tesla', MOTOR.ev_hype_low, BATTERY.tesla, [5] * 1)
-po4 = drive_train('po4', MOTOR.ev_hype_low, BATTERY.life_po4, [25] * 2)
-weststart = drive_train('weststart', MOTOR.ev_hype_low, BATTERY.weststart, [35] * 3)
+tesla = drive_train('tesla', MOTOR.ev_hype_high, BATTERY.tesla, [6] * 1)
+po4 = drive_train('po4', MOTOR.ev_hype_high, BATTERY.life_po4, [25] * 2)
+weststart = drive_train('weststart', MOTOR.ev_hype_high, BATTERY.weststart, [42] * 2)
+lfp = drive_train('lfp', MOTOR.ev_hype_high, BATTERY.lfp, [49] * 2)

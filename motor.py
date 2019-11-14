@@ -29,8 +29,8 @@ class motor:
         string = string + '- - - - - - - - - - - - - - - - - - - - -' + '\n'
 
         # Specs
-        string = string + 'power: ' + str(self.power) + ' [V]' + '\n'
-        string = string + 'voltage_max: ' + str(self.voltage_max) + ' [V]' + '\n'
+        string = string + 'power: ' + str(round(self.power,1)) + ' [V]' + '\n'
+        string = string + 'voltage_max: ' + str(round(self.voltage_max,1)) + ' [V]' + '\n'
         string = string + '\n' + '\n'
 
         return string
@@ -54,3 +54,4 @@ class motor:
 
 
 ev_hype_low = motor('ev_hype_low', 75, 90, 130)
+ev_hype_high = motor('ev_hype_high', 75, 90, 180)

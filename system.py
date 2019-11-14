@@ -11,7 +11,7 @@ class conversion:
 
         # Generate folder for results (only for highest level file)
         self.path = 'specifications'
-        os.mkdir(self.path)
+        os.makedirs(self.path, exist_ok=True)
 
         # Initialize
         self.my_shell = my_shell
@@ -21,7 +21,7 @@ class conversion:
         self.name = name
         self.consumption = consumption   # kWh / 100 km (https://ev-database.org/cheatsheet/energy-consumption-electric-car)
         self.weight = self.my_shell.weight + self.my_drive_train.weight
-        self.range = round(self.my_drive_train.capacity / self.consumption * 100, 1)   # km
+        self.range = self.my_drive_train.capacity / self.consumption * 100  # km
 
         # Error
         self.error_weight()
@@ -67,9 +67,9 @@ class conversion:
         # Specs
         string = string + 'my_shell: ' + str(self.my_shell.__class__.__name__) + '\n'
         string = string + 'my_drive_train: ' + str(self.my_drive_train.__class__.__name__) + '\n'
-        string = string + 'consumption: ' + str(self.consumption) + ' [kWh / 100 km]' + '\n'
-        string = string + 'weight: ' + str(self.weight) + ' [kg]' + '\n'
-        string = string + 'range: ' + str(self.range) + ' [km]' + '\n'
+        string = string + 'consumption: ' + str(round(self.consumption,1)) + ' [kWh / 100 km]' + '\n'
+        string = string + 'weight: ' + str(round(self.weight,1)) + ' [kg]' + '\n'
+        string = string + 'range: ' + str(round(self.range,1)) + ' [km]' + '\n'
         string = string + '\n' + '\n'
 
         return string
@@ -110,6 +110,5 @@ class conversion:
 
 
 
-my_conversion = conversion('jaguar', SHELL.jaguar, DRIVE_TRAIN.weststart, 18)
-my_conversion.write()
+my_conversion = conversion('jaguar', SHELL.jaguar, DRIVE_TRAIN.po4, 18)
 my_conversion.write_all()

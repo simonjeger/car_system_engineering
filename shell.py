@@ -32,10 +32,10 @@ class shell:
         string = string + '- - - - - - - - - - - - - - - - - - - - -' + '\n'
 
         # Specs
-        string = string + 'weight kerb: ' + str(self.weight_kerb) + ' [kg]' + '\n'
-        string = string + 'weight_removed: ' + str(self.weight_removed) + ' [kg]' + '\n'
-        string = string + 'weight: ' + str(self.weight) + ' [kg]' + '\n'
-        string = string + 'weight_max: ' + str(self.weight_max) + ' [kg]' + '\n'
+        string = string + 'weight kerb: ' + str(round(self.weight_kerb,1)) + ' [kg]' + '\n'
+        string = string + 'weight_removed: ' + str(round(self.weight_removed,1)) + ' [kg]' + '\n'
+        string = string + 'weight: ' + str(round(self.weight,1)) + ' [kg]' + '\n'
+        string = string + 'weight_max: ' + str(round(self.weight_max,1)) + ' [kg]' + '\n'
         string = string + 'free_space: ' + str(self.free_space) + ' [m]' + '\n'
         string = string + '\n' + '\n'
 
